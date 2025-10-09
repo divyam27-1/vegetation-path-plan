@@ -1,0 +1,18 @@
+{
+  "files.exclude": {
+    "**/*.tif": true,
+    "**/*.tiff": true,
+    "**/*.png": true,
+    "**/*.jpg": true,
+    "**/*.jpeg": true,
+    "**/*.xcf": true
+  },
+  "search.exclude": {
+    "**/*.tif": true,
+    "**/*.tiff": true,
+    "**/*.png": true,
+    "**/*.jpg": true,
+    "**/*.jpeg": true,
+    "**/*.xcf": true
+  }
+}
