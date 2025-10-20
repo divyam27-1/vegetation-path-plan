@@ -29,6 +29,7 @@ _, _, HEIGHT_METERS = _geod.inv(LON_MIN, LAT_MIN, LON_MIN, LAT_MAX)
 
 SPRAY_RADIUS = 5    #m
 CHUNK_DIM = max(1, round(HEIGHT_PX * SPRAY_RADIUS / HEIGHT_METERS))
+SPRAY_RADIUS_PX = CHUNK_DIM
 NUM_CHUNKS_V = np.ceil(HEIGHT_METERS / SPRAY_RADIUS)
 NUM_CHUNKS_H = np.ceil(WIDTH_METERS / SPRAY_RADIUS)
 
@@ -66,8 +67,12 @@ def pixel_coord_to_geo_coord(y, x, _chunk_dim=CHUNK_DIM, y_offset=0, x_offset=0,
     cy, cx = pixel_coord_to_chunk_coord(y, x, _chunk_dim=_chunk_dim)
     return chunk_coord_to_geo_coord(cy, cx, y_offset=y_offset, x_offset=x_offset, _chunk_latlon_boundaries=_chunk_latlon_boundaries)
 
-def chunk_coord_to_pixel_coord(cy, cx, _chunk_dim=CHUNK_DIM):
-    return np.array([cy * _chunk_dim, cx * _chunk_dim])
+def chunk_coord_to_pixel_coord(cy, cx, _chunk_dim=CHUNK_DIM, get_center=False):
+    center = np.array([cy * _chunk_dim, cx * _chunk_dim])
+    if get_center:
+        return center + _chunk_dim//2
+    else:
+        return center
 
 
 #ALL

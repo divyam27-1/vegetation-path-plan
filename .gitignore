@@ -3,3 +3,5 @@ Data/NDVI.data.tif
 NDVI.xcf
 __pycache__
 *.pyc
+np-env
+Data/DronePaths_npy
