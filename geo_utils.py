@@ -5,13 +5,14 @@ from pyproj import CRS, Transformer, Geod
 _fpath = "Data/NDVI.data.tif"
 
 ndvi, _profile, _transform, _crs = None, None, None, None
-NDVI_NAN_MASK = -10000
 with rasterio.open(_fpath) as src:
     ndvi = src.read(1) 
 
     _profile = src.profile
     _transform = src.transform
     _crs = src.crs
+ndvi_m = np.ma.masked_less(ndvi, -1)
+NDVI_NAN_MASK = -10000
 
 _xmin, _ymin = _transform * (0, 0)
 _xmax, _ymax = _transform * (src.width, src.height)
