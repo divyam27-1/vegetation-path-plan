@@ -2,6 +2,7 @@ import numpy as np
 import rasterio
 from pyproj import CRS, Transformer, Geod
 import yaml
+from pymavlink import mavutil
 
 _fpath = "Data/NDVI.data.tif"
 _cfgpath = "config.yaml"
@@ -71,9 +72,14 @@ def chunk_coord_to_geo_coord(y, x,
                             _chunk_latlon_boundaries=(CHUNK_LAT_BOUNDARIES, CHUNK_LON_BOUNDARIES)):
     return _chunk_latlon_boundaries[0][y]-y_offset, _chunk_latlon_boundaries[1][x]+x_offset
 
-def pixel_coord_to_geo_coord(y, x, _chunk_dim=CHUNK_DIM_PX, y_offset=0, x_offset=0, _chunk_latlon_boundaries=(CHUNK_LAT_BOUNDARIES, CHUNK_LON_BOUNDARIES)):
-    cy, cx = pixel_coord_to_chunk_coord(y, x, _chunk_dim=_chunk_dim)
-    return chunk_coord_to_geo_coord(cy, cx, y_offset=y_offset, x_offset=x_offset, _chunk_latlon_boundaries=_chunk_latlon_boundaries)
+def pixel_coord_to_geo_coord(y, x, img=ndvi, _lat_bounds=(LAT_MIN, LAT_MAX), _lon_bounds=(LON_MIN,LON_MAX)):
+    _img_height, _img_width = img.shape[0], img.shape[1]
+    _lat_min, _lat_max = _lat_bounds
+    _lon_min, _lon_max = _lon_bounds
+    lat = _lat_min + (y / (_img_height - 1)) * (_lat_max - _lat_min)
+    lon = _lon_min + (x / (_img_width - 1)) * (_lon_max - _lon_min)
+
+    return lat, lon
 
 def chunk_coord_to_pixel_coord(cy, cx, _chunk_dim=CHUNK_DIM_PX, get_center=False):
     center = np.array([cy * _chunk_dim, cx * _chunk_dim])
@@ -81,6 +87,73 @@ def chunk_coord_to_pixel_coord(cy, cx, _chunk_dim=CHUNK_DIM_PX, get_center=False
         return center + _chunk_dim//2
     else:
         return center
+
+def generate_mission_waypoints(mission, outpath, _takeoff=(LAT_MAX, LON_MIN)):
+    header = "QGC WPL 110"
+    frame = mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT
+    alt = _cfg["mission"]["flight_altitude"]
+
+    def write_args(file, args):
+        l = len(args)
+        for i, arg in enumerate(args):
+            if type(arg)==float:
+                file.write(f"{arg:.8f}")
+            else:
+                file.write(f"{arg}")
+            if i == l-1:
+                file.write("\n")
+            else:
+                file.write("\t")
+
+    with open(outpath, "w") as f:
+        f.write(f"{header}\n")
+        #home position
+        write_args(f, [
+            0,
+            1,
+            frame,
+            mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,
+            0,
+            0,
+            0,
+            0,
+            _takeoff[0],
+            _takeoff[1],
+            alt,
+            1])
+        
+        #takeoff command
+        write_args(f, [
+            1,                                      #index
+            0,                                      #is current wp
+            frame,                                  #coord frame
+            mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,    #command
+            0,                                      #param
+            0,                                      #param
+            0,                                      #param
+            0,                                      #param
+            _takeoff[0],                            #lat
+            _takeoff[1],                            #lon
+            alt,                                    #alt
+            1                                       #autocontinue
+        ])
+        
+        #rest of waypoints
+        for i, wp in enumerate(mission):
+            write_args(f, [
+                i+2,
+                0,
+                frame,
+                mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,
+                0,
+                0,
+                0,
+                0,
+                wp[0],
+                wp[1],
+                alt,
+                1
+            ])
 
 
 #ALL

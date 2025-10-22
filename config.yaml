@@ -4,3 +4,6 @@
   spray_diameter_m: 5
   chunk_size_m: 4.2
   ndvi_nan_mask: -10000
+
+  mission:
+    flight_altitude: 10
