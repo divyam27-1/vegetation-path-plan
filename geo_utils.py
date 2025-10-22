@@ -85,7 +85,7 @@ def chunk_coord_to_pixel_coord(cy, cx, _chunk_dim=CHUNK_DIM_PX, get_center=False
 
 #ALL
 __all__ = [
-    "ndvi", "_xmin", "_ymin", "_xmax", "_ymax", "HEIGHT_PX", "WIDTH_PX",
+    "ndvi", "ndvi_m", "_xmin", "_ymin", "_xmax", "_ymax", "HEIGHT_PX", "WIDTH_PX",
     "UTM_CRS", "WGS84_CRS", "LON_MIN", "LAT_MIN", "LON_MAX", "LAT_MAX",
     "WIDTH_METERS", "HEIGHT_METERS", "CHUNK_DIM", "CHUNK_DIM_PX", "NUM_CHUNKS_V",
     "NUM_CHUNKS_H", "CHUNK_V_BOUNDS", "CHUNK_H_BOUNDS", "CHUNK_BOUNDS", 

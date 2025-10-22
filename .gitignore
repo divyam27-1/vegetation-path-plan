@@ -4,5 +4,6 @@ NDVI.xcf
 __pycache__
 *.pyc
 np-env
-Data/DronePaths_npy
 Spray Patterns
+Flight Paths
+Data
