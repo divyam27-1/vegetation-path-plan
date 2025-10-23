@@ -8,6 +8,7 @@
 ## Requirements:
 - In the root directory, make a folder 'Data'
 - Install the NDVI.data.tiff file from the following link: https://iittpacin-my.sharepoint.com/:i:/g/personal/sarvendranath_iittp_ac_in/ESl1XeO8DdtIss9tTqWQccwBBmK9HZNbNdyJNGqpgxHe0g?e=4pyrle
+- Run `pip install requirements.txt`
 - Run the python notebooks in the given order
 
 ## Contents:
