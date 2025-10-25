@@ -1,8 +1,14 @@
 # Vegetation Path Plan
 
+## How to Contribute:
+1) Clone the repository with `git clone https://github.com/divyam27-1/vegetation-path-plan.git`
+2) Make a seperate branch or pull request
+3) Commit your changes then push NOT to main
+
 ## Requirements:
 - In the root directory, make a folder 'Data'
 - Install the NDVI.data.tiff file from the following link: https://iittpacin-my.sharepoint.com/:i:/g/personal/sarvendranath_iittp_ac_in/ESl1XeO8DdtIss9tTqWQccwBBmK9HZNbNdyJNGqpgxHe0g?e=4pyrle
+- Run `pip install requirements.txt`
 - Run the python notebooks in the given order
 
 ## Contents:
