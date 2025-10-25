@@ -1,5 +1,6 @@
 ---
-  infection_threshold_ndvi: 0.47
+  crop: sugarcane
+  infection_threshold_ndvi: 0.41
   chunk_overflow_mask_ratio: 0.6
   spray_diameter_m: 5
   chunk_size_m: 3.5

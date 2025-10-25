@@ -3,13 +3,14 @@ import rasterio
 from pyproj import CRS, Transformer, Geod
 import yaml
 from pymavlink import mavutil
+import os
 
-_fpath = "Data/NDVI.data.tif"
 _cfgpath = "config.yaml"
-
 with open(_cfgpath) as f:
     _cfg = yaml.safe_load(f)
 
+CROP = _cfg['crop']
+_fpath = f"Data/NDVI_{CROP}.data.tif"
 ndvi, _profile, _transform, _crs = None, None, None, None
 with rasterio.open(_fpath) as src:
     ndvi = src.read(1) 
@@ -20,6 +21,9 @@ with rasterio.open(_fpath) as src:
 ndvi_m = np.ma.masked_less(ndvi, -1)
 NDVI_NAN_MASK = _cfg["ndvi_nan_mask"]
 
+os.makedirs(os.path.dirname(f"Data/{CROP}/"), exist_ok=True)
+os.makedirs(os.path.dirname(f"Flight Paths/{CROP}/"), exist_ok=True)
+os.makedirs(os.path.dirname(f"Spray Patterns/{CROP}/"), exist_ok=True)
 
 _xmin, _ymin = _transform * (0, 0)
 _xmax, _ymax = _transform * (src.width, src.height)
