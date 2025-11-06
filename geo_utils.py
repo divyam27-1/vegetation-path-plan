@@ -92,6 +92,19 @@ def chunk_coord_to_pixel_coord(cy, cx, _chunk_dim=CHUNK_DIM_PX, get_center=False
     else:
         return center
 
+def geo_coord_to_pixel_coord(lat, lon, img=ndvi, _lat_bounds=(LAT_MIN, LAT_MAX), _lon_bounds=(LON_MIN, LON_MAX)):
+    _img_height, _img_width = img.shape[0], img.shape[1]
+    _lat_min, _lat_max = _lat_bounds
+    _lon_min, _lon_max = _lon_bounds
+
+    y = round((lat - _lat_min) / (_lat_max - _lat_min) * (_img_height - 1))
+    x = round((lon - _lon_min) / (_lon_max - _lon_min) * (_img_width - 1))
+
+    y = np.clip(y, 0, _img_height - 1)
+    x = np.clip(x, 0, _img_width - 1)
+
+    return np.array([y, x])
+
 def generate_mission_waypoints(mission, outpath, _takeoff=(LAT_MAX, LON_MIN)):
     header = "QGC WPL 110"
     frame = mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT
@@ -170,5 +183,6 @@ __all__ = [
     "NDVI_NAN_MASK",
 
     "get_chunk", "pixel_coord_to_chunk_coord", "chunk_coord_to_geo_coord",
-    "pixel_coord_to_geo_coord", "chunk_coord_to_pixel_coord"
+    "pixel_coord_to_geo_coord", "chunk_coord_to_pixel_coord", "geo_coord_to_pixel_coord",
+    "generate_mission_waypoints"
 ]

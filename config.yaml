@@ -1,6 +1,6 @@
 ---
   crop: sugarcane
-  infection_threshold_ndvi: 0.41
+  infection_threshold_ndvi: 0.47
   chunk_overflow_mask_ratio: 0.6
   spray_diameter_m: 5
   chunk_size_m: 3.5
@@ -8,3 +8,9 @@
 
   mission:
     flight_altitude: 10
+    corners_type: coord    # options: 'coord', 'chunk', 'pixel'
+    corners:               # in format [y,x] or [lat,lon]
+      - [16.32501595958643, 80.89741963256189]
+      - [16.32678990870368, 80.89794523121337]
+      - [16.32485757127239, 80.89791238129766]
+      - [16.32666319805245, 80.89843797994914]
